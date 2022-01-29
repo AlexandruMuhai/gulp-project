@@ -1,3 +1,6 @@
-body{
-  background-color: #fff;
-}
+@import "functions.scss";
+@import "variables.scss";
+@import "fonts.scss";
+@import "default.scss";
+@import "container.scss";
+@import "main.scss";

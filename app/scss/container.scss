@@ -1,0 +1,14 @@
+.container{
+  max-width:$container;
+  padding:0 20px;
+  margin:0 auto;
+  @media (max-width: $xl){
+    max-width:$lg;
+  }
+  @media (max-width: $lg){
+    max-width:$md;
+  }
+  @media (max-width: $md){
+    max-width:$sm;
+  }
+}

@@ -20,7 +20,8 @@ function scripts (){
     return src([
         'node_modules/jquery/dist/jquery.js',
         'node_modules/slick-carousel/slick/slick.js',
-        'app/js/main.js'
+        'app/js/**/*.js',
+        '!app/js/main.min.js'
     ])
         .pipe(concat('main.min.js'))
         .pipe(uglify())
@@ -34,19 +35,13 @@ function img ()
   .pipe(imagemin([
     imagemin.gifsicle({interlaced: true}),
 	  imagemin.mozjpeg({quality: 75, progressive: true}),
-	  imagemin.optipng({optimizationLevel: 5}),
-	  imagemin.svgo({
-		plugins: [
-			{removeViewBox: true},
-			{cleanupIDs: false}
-		]
-	})
+	  imagemin.optipng({optimizationLevel: 5})
   ]))
   .pipe(dest('dist/images'))
 }
 
 function styles (){
-    return src('app/scss/style.scss')
+    return src(['app/scss/style.scss',"app/css/slick.css"])
         .pipe(scss({outputStyle: 'compressed'}))
         .pipe(concat('style.min.css'))
         .pipe(autoprefixer({
@@ -74,7 +69,7 @@ function build () {
 function watching (){
     watch(['app/scss/**/*.scss'],styles);
     watch(['app/js/**/*.js','!app/js/main.min.js'], scripts);
-    watch(['app/*html']).on('change',browserSync.reload);
+    watch(['app/**/*.html']).on('change',browserSync.reload);
 }
 
 exports.cleandist   = cleandist;
@@ -83,5 +78,6 @@ exports.watching    = watching;
 exports.browsersync = browsersync;
 exports.scripts     = scripts;
 exports.img         = img;
-exports.build       = parallel(build,img);
+exports.build       = build;
+exports.dist        = parallel(build,img);
 exports.default     = parallel(scripts, browsersync, watching);
